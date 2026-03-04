@@ -1,0 +1,127 @@
+---
+---
+
+<header class="fixed top-0 left-0 right-0 z-40">
+  <div
+    class="glass-nav mx-auto flex max-w-6xl items-center justify-between px-4 py-4 text-[0.8rem] md:px-6"
+  >
+    <a
+      href="/"
+      class="font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
+      data-cursor="hover"
+    >
+      PULANGJAMSEBELAS
+    </a>
+
+    <nav class="hidden items-center gap-6 md:flex">
+      <a
+        href="/"
+        class="text-neutral-400 transition-colors hover:text-[var(--color-light)]"
+        data-cursor="hover"
+      >
+        Home
+      </a>
+      <a
+        href="/works"
+        class="text-neutral-400 transition-colors hover:text-[var(--color-light)]"
+        data-cursor="hover"
+      >
+        Works
+      </a>
+      <a
+        href="/about"
+        class="text-neutral-400 transition-colors hover:text-[var(--color-light)]"
+        data-cursor="hover"
+      >
+        About
+      </a>
+    </nav>
+
+    <button
+      class="js-nav-toggle relative flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/60 md:hidden"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+      type="button"
+      data-cursor="hover"
+    >
+      <span
+        class="pointer-events-none block h-[1px] w-4 origin-center bg-white transition-transform duration-200"
+      ></span>
+      <span
+        class="pointer-events-none mt-[5px] block h-[1px] w-4 origin-center bg-white transition-transform duration-200"
+      ></span>
+    </button>
+  </div>
+
+  <div
+    class="js-nav-overlay pointer-events-none fixed inset-0 z-30 flex items-center justify-center bg-black/90 opacity-0 transition-opacity duration-300 md:hidden"
+  >
+    <nav class="flex flex-col items-center gap-8">
+      <a
+        href="/"
+        class="text-2xl font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
+        data-cursor="hover"
+      >
+        Home
+      </a>
+      <a
+        href="/works"
+        class="text-2xl font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
+        data-cursor="hover"
+      >
+        Works
+      </a>
+      <a
+        href="/about"
+        class="text-2xl font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
+        data-cursor="hover"
+      >
+        About
+      </a>
+    </nav>
+  </div>
+
+<script>
+  if (typeof window !== "undefined") {
+    const toggle = document.querySelector(".js-nav-toggle");
+    const overlay = document.querySelector(".js-nav-overlay");
+    const body = document.body;
+
+    if (toggle && overlay) {
+      const [line1, line2] = toggle.querySelectorAll("span");
+
+      const setOpen = (open) => {
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        overlay.style.pointerEvents = open ? "auto" : "none";
+        overlay.style.opacity = open ? "1" : "0";
+
+        if (line1 && line2) {
+          if (open) {
+            line1.style.transform = "translateY(3px) rotate(45deg)";
+            line2.style.transform = "translateY(-3px) rotate(-45deg)";
+          } else {
+            line1.style.transform = "";
+            line2.style.transform = "";
+          }
+        }
+
+        body.style.overflow = open ? "hidden" : "";
+      };
+
+      let isOpen = false;
+
+      toggle.addEventListener("click", () => {
+        isOpen = !isOpen;
+        setOpen(isOpen);
+      });
+
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+          isOpen = false;
+          setOpen(false);
+        }
+      });
+    }
+  }
+</script>
+

@@ -1,11 +1,167 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import ProjectCard from "../components/ProjectCard.astro";
+import Navbar from "../components/Navbar.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const projects = await getCollection("projects");
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Digital Creator Portfolio">
+  <Navbar />
+
+  <main class="relative h-[100dvh] w-full overflow-hidden js-hero">
+    <div class="pointer-events-none absolute inset-0 z-0">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        class="hero-video h-[100dvh] w-full object-cover opacity-60 grayscale"
+      >
+        <source
+          src="https://assets.mixkit.co/videos/preview/mixkit-abstract-wavy-lines-2526-large.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black/95" />
+    </div>
+
+    <section
+      class="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center md:px-8"
+    >
+      <div
+        class="js-hero-parallax mx-auto flex w-full max-w-7xl flex-col items-center gap-5 md:gap-7"
+      >
+        <p
+          class="js-hero-line text-[0.7rem] tracking-[0.6em] text-[var(--color-accent)]/90 uppercase md:text-xs"
+        >
+          DIGITAL CREATOR
+        </p>
+        <h1
+          class="js-hero-line font-black tracking-tight text-[var(--color-light)] text-[clamp(2.5rem,8vw,8rem)]"
+        >
+          PULANGJAMSEBELAS
+        </h1>
+        <p
+          class="js-hero-line max-w-xl text-sm font-light text-neutral-400 md:text-base lg:text-lg"
+        >
+          Cinematic visuals, motion-driven stories, and late-night experiments at the intersection of
+          design and sound.
+        </p>
+        <div class="js-hero-line pt-4">
+          <a
+            href="#works"
+            class="glass-button inline-flex items-center gap-3 px-8 py-3 text-xs font-medium tracking-[0.18em] uppercase text-[var(--color-light)]"
+          >
+            Lihat Karya
+            <span class="inline-block h-px w-6 bg-[var(--color-light)]/60" />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section
+    id="works"
+    class="relative min-h-screen px-4 py-24 md:px-8 md:py-32 lg:px-20"
+  >
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_#1d1d1f_0,_#000_55%)] opacity-80" />
+
+    <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-12">
+      <header class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-xs font-medium tracking-[0.28em] text-neutral-500 uppercase">
+            Selected works
+          </p>
+          <h2 class="mt-3 text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+            Selected <span class="text-[var(--color-accent)]">Works.</span>
+          </h2>
+        </div>
+        <p class="max-w-md text-xs text-neutral-500 md:text-sm">
+          Curated explorations in motion graphics, 3D, and editorial storytelling. Each project is
+          treated like a short film, crafted frame by frame.
+        </p>
+      </header>
+
+      <div
+        class="js-projects-grid grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3"
+      >
+        {projects.map((project) => (
+          <div class="js-project-card">
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    if (typeof window !== "undefined") {
+      document.addEventListener("astro:page-load", () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const prefersReduced = window
+          .matchMedia("(prefers-reduced-motion: reduce)")
+          ?.matches;
+
+        if (prefersReduced) return;
+
+        const runHero = () => {
+          gsap.from(".js-hero-line", {
+            y: 32,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out",
+            stagger: 0.15,
+          });
+
+          gsap.to(".js-hero-parallax", {
+            yPercent: -18,
+            opacity: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".js-hero",
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
+
+          document.querySelectorAll(".js-project-card").forEach((card, index) => {
+            gsap.from(card, {
+              y: 40,
+              opacity: 0,
+              duration: 0.9,
+              ease: "power3.out",
+              delay: index * 0.03,
+              scrollTrigger: {
+                trigger: card,
+                start: "top 80%",
+                toggleActions: "play none none reverse",
+              },
+            });
+          });
+        };
+
+        const preloaderShown =
+          window.sessionStorage.getItem("preloaderShown") === "true";
+
+        if (preloaderShown) {
+          runHero();
+        } else {
+          window.addEventListener(
+            "preloader:done",
+            () => {
+              runHero();
+            },
+            { once: true },
+          );
+        }
+      });
+    }
+  </script>
 </Layout>

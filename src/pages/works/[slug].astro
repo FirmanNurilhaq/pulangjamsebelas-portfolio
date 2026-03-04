@@ -1,0 +1,91 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props as Props;
+const { Content } = await project.render();
+---
+
+<Layout title={project.data.title}>
+  <article class="pb-20">
+    <div class="relative h-[50vh] w-full overflow-hidden">
+      <a
+        href="/"
+        class="absolute top-8 left-6 z-50 flex items-center gap-2 rounded-full bg-black/40 px-5 py-2 text-xs uppercase tracking-[0.15em] text-white backdrop-blur-md border border-white/20 transition-all hover:bg-white hover:text-black md:left-12"
+      >
+        ← Back
+      </a>
+      <img
+        src={project.data.image}
+        alt={project.data.title}
+        class="h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+    </div>
+
+    <section class="bg-black px-6 pt-10 md:px-8 md:pt-12">
+      <div
+        class="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black/80 shadow-[0_24px_70px_rgba(0,0,0,0.9)]"
+      >
+        <video
+          class="h-full w-full"
+          controls
+          playsinline
+          muted
+        >
+          <source
+            src="https://assets.mixkit.co/videos/preview/mixkit-abstract-lights-background-2325-large.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-4xl px-6 pt-10 md:px-8 md:pt-12">
+      <header class="mb-8 space-y-4 md:mb-10">
+        <div class="flex flex-wrap items-center gap-3">
+          <span
+            class="inline-flex items-center rounded-full border border-[var(--color-accent)]/60 bg-[var(--color-accent)]/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]"
+          >
+            {project.data.category}
+          </span>
+          <span class="text-[0.7rem] uppercase tracking-[0.18em] text-neutral-500">
+            {project.data.publishDate.toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
+          </span>
+        </div>
+
+        <h1 class="text-3xl font-semibold tracking-tight md:text-4xl lg:text-5xl">
+          {project.data.title}
+        </h1>
+
+        <p class="max-w-2xl text-sm text-neutral-400 md:text-base">
+          {project.data.excerpt}
+        </p>
+      </header>
+
+      <div class="prose prose-invert max-w-none prose-p:text-neutral-300 prose-strong:text-[var(--color-light)] prose-a:text-[var(--color-accent)]">
+        <Content />
+      </div>
+    </section>
+  </article>
+</Layout>
+

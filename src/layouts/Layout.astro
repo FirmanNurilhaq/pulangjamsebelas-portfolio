@@ -1,23 +1,139 @@
+---
+import "../styles/global.css";
+import { ViewTransitions } from "astro:transitions";
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title ? `${title} | Pulangjamsebelas` : "Pulangjamsebelas"}</title>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <ViewTransitions />
+  </head>
+  <body class="bg-black text-[var(--color-light)] overflow-x-hidden">
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div class="ambient-orb"></div>
+      <div class="film-grain"></div>
+    </div>
+
+    <div
+      class="preloader fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black text-white"
+    >
+      <div class="preloader-inner">
+        <span>Loading</span>
+        <span class="preloader-counter">0%</span>
+      </div>
+    </div>
+
+    <main class="min-h-[100dvh]">
+      <slot />
+    </main>
+
+    <footer class="border-t border-white/5 bg-black/90">
+      <div
+        class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-[0.7rem] text-neutral-500 md:flex-row md:px-6"
+      >
+        <p class="tracking-[0.18em] uppercase">
+          © {new Date().getFullYear()} Pulangjamsebelas
+        </p>
+        <p class="text-neutral-600">
+          Crafted with Astro, Tailwind, and GSAP in the late hours.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import Lenis from "@studio-freight/lenis";
+
+      if (typeof window !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const existingLenis = (window as any).__lenis || null;
+
+        if (!existingLenis) {
+          const lenis = new Lenis({
+            lerp: 0.12,
+            smoothWheel: true,
+            wheelMultiplier: 1.1,
+          });
+
+          (window as any).__lenis = lenis;
+
+          lenis.on("scroll", ScrollTrigger.update);
+
+          gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+          });
+
+          gsap.ticker.lagSmoothing(0);
+        }
+
+        document.addEventListener("astro:page-load", () => {
+          const preloader = document.querySelector(".preloader");
+          const counterEl = document.querySelector(".preloader-counter");
+
+          if (!preloader || !counterEl) {
+            window.dispatchEvent(new Event("preloader:done"));
+            return;
+          }
+
+          const alreadyShown = window.sessionStorage.getItem("preloaderShown") === "true";
+
+          if (alreadyShown) {
+            if (preloader instanceof HTMLElement) {
+              preloader.style.display = "none";
+            }
+            window.dispatchEvent(new Event("preloader:done"));
+            return;
+          }
+
+          let value = 0;
+          const target = 100;
+          const step = 4;
+          const interval = setInterval(() => {
+            value += step;
+            if (value >= target) {
+              value = target;
+            }
+            counterEl.innerHTML = value + "%";
+
+            if (value === target) {
+              clearInterval(interval);
+
+              gsap.to(preloader, {
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.inOut",
+                onComplete: () => {
+                  if (preloader instanceof HTMLElement) {
+                    preloader.style.display = "none";
+                  }
+                  window.sessionStorage.setItem("preloaderShown", "true");
+                  window.dispatchEvent(new Event("preloader:done"));
+                },
+              });
+            }
+          }, 40);
+        });
+      }
+    </script>
+  </body>
+</html>

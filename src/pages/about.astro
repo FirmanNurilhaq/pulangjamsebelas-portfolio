@@ -6,7 +6,9 @@ import Layout from "../layouts/Layout.astro";
   <section
     class="mx-auto flex min-h-[80vh] max-w-6xl items-center px-6 py-16 md:px-10 md:py-24 lg:py-28"
   >
-    <div class="js-about-wrapper grid w-full gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)]">
+    <div
+      class="js-about-wrapper grid w-full gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)]"
+    >
       <div class="flex items-center justify-center">
         <div
           class="js-about-photo relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-black/60 shadow-[0_24px_70px_rgba(0,0,0,0.9)]"
@@ -17,36 +19,54 @@ import Layout from "../layouts/Layout.astro";
             class="h-full w-full object-cover"
             loading="lazy"
           />
-          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          <div
+            class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"
+          >
+          </div>
         </div>
       </div>
 
       <div class="space-y-5 md:space-y-6">
-        <h1 class="js-about-line text-3xl font-semibold tracking-tight md:text-4xl lg:text-5xl">
+        <a
+          href="/"
+          class="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs uppercase tracking-[0.15em] text-white backdrop-blur-md transition-all hover:bg-white hover:text-black"
+        >
+          ← Back to Home
+        </a>
+        <h1
+          class="js-about-line text-3xl font-semibold tracking-tight md:text-4xl lg:text-5xl"
+        >
           About the <span class="text-[var(--color-accent)]">Creator.</span>
         </h1>
 
-        <p class="js-about-line text-xs font-medium uppercase tracking-[0.28em] text-neutral-500">
+        <p
+          class="js-about-line text-xs font-medium uppercase tracking-[0.28em] text-neutral-500"
+        >
           Bandung · Motion Design · Late-night Renders
         </p>
 
-        <div class="space-y-4 text-sm leading-relaxed text-neutral-300 md:text-base">
+        <div
+          class="space-y-4 text-sm leading-relaxed text-neutral-300 md:text-base"
+        >
           <p class="js-about-line">
-            Pulangjamsebelas is a motion designer based in Bandung, West Java, who builds visual
-            stories frame by frame. Between city lights and quiet backstreets, every project starts as
-            a rough sketch and slowly evolves into a fully choreographed piece of moving image.
+            Pulangjamsebelas is a motion designer based in Bandung, West Java,
+            who builds visual stories frame by frame. Between city lights and
+            quiet backstreets, every project starts as a rough sketch and slowly
+            evolves into a fully choreographed piece of moving image.
           </p>
           <p class="js-about-line">
-            The work blends 3D, brutalist graphic language, and editorial pacing — always chasing that
-            balance where typography, light, and rhythm feel like they belong to the same universe.
-            From kinetic type experiments to client campaigns, each timeline is treated like a film
-            sequence, not just a set of keyframes.
+            The work blends 3D, brutalist graphic language, and editorial pacing
+            — always chasing that balance where typography, light, and rhythm
+            feel like they belong to the same universe. From kinetic type
+            experiments to client campaigns, each timeline is treated like a
+            film sequence, not just a set of keyframes.
           </p>
           <p class="js-about-line">
-            Most nights end long after midnight, with coffee in one hand and a pen tablet in the
-            other. That late-hour focus is where pulangjamsebelas feels most at home: tweaking curves,
-            nudging frames by a few milliseconds, and searching for visuals that feel honest, sharp,
-            and slightly unexpected.
+            Most nights end long after midnight, with coffee in one hand and a
+            pen tablet in the other. That late-hour focus is where
+            pulangjamsebelas feels most at home: tweaking curves, nudging frames
+            by a few milliseconds, and searching for visuals that feel honest,
+            sharp, and slightly unexpected.
           </p>
         </div>
       </div>
@@ -60,8 +80,9 @@ import Layout from "../layouts/Layout.astro";
     if (typeof window !== "undefined") {
       gsap.registerPlugin(ScrollTrigger);
 
-      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)")
-        ?.matches;
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      )?.matches;
 
       if (!prefersReduced) {
         gsap.from(".js-about-line", {
@@ -90,4 +111,3 @@ import Layout from "../layouts/Layout.astro";
     }
   </script>
 </Layout>
-

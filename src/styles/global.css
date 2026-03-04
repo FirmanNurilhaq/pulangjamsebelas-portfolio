@@ -4,9 +4,7 @@
   --color-dark: #000000;
   --color-light: #f5f5f7;
   --color-accent: #ff007a;
-
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "Segoe UI", sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
 }
 
 @layer base {
@@ -24,12 +22,11 @@
     color: var(--color-light);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
+    /* scroll-behavior DIHAPUS agar Lenis bisa bekerja tanpa bentrok dengan CSS */
   }
 
   body {
     overflow-x: hidden !important;
-    background: radial-gradient(circle at top, #111111 0, #000000 52%, #000000 100%);
   }
 
   ::selection {
@@ -56,7 +53,6 @@
   background: #1d1d1f;
   border-radius: 999px;
   border: 2px solid #000000;
-  box-shadow: 0 0 0 1px #000000;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -65,82 +61,24 @@
 
 /* Glassmorphism utilities */
 .glass-nav {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.9),
-    rgba(10, 10, 10, 0.85),
-    rgba(0, 0, 0, 0.92)
-  );
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(245, 245, 247, 0.12);
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.95),
-    0 0 0 1px rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .glass-button {
   border-radius: 999px;
   border: 1px solid rgba(245, 245, 247, 0.18);
-  background: linear-gradient(135deg, rgba(245, 245, 247, 0.12), rgba(0, 0, 0, 0.7));
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease,
-    border-color 220ms ease,
-    background 220ms ease,
-    color 220ms ease;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
 }
 
 .glass-button:hover {
   transform: translateY(-2px);
   border-color: rgba(255, 0, 122, 0.8);
-  background: linear-gradient(135deg, rgba(255, 0, 122, 0.18), rgba(0, 0, 0, 0.9));
-  box-shadow:
-    0 26px 55px rgba(0, 0, 0, 0.95),
-    0 0 24px rgba(255, 0, 122, 0.45);
-}
-
-.glass-button:active {
-  transform: translateY(0);
-  box-shadow:
-    0 12px 26px rgba(0, 0, 0, 0.85),
-    0 0 14px rgba(255, 0, 122, 0.35);
-}
-
-/* Custom cursor */
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 9999px;
-  background: #ffffff;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transform: translate3d(-50%, -50%, 0);
-  will-change: transform;
-  transition:
-    width 180ms ease-out,
-    height 180ms ease-out,
-    opacity 180ms ease-out;
-}
-
-.custom-cursor--active {
-  width: 32px;
-  height: 32px;
-}
-
-@media (pointer: coarse) {
-  .custom-cursor {
-    display: none;
-  }
+  background: rgba(255, 0, 122, 0.1);
 }
 
 /* Preloader */
@@ -172,49 +110,9 @@
   color: #f5f5f7;
 }
 
-/* Ambient background orb */
-.ambient-orb {
-  position: absolute;
-  inset: -40%;
-  margin: auto;
-  width: 120vmin;
-  height: 120vmin;
-  border-radius: 999px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(255, 0, 122, 0.12), transparent 55%),
-    radial-gradient(circle at 80% 100%, rgba(120, 120, 130, 0.24), transparent 60%),
-    radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 1), #000000);
-  filter: blur(10px);
-  opacity: 0.8;
-  animation: ambient-orb-move 24s ease-in-out infinite alternate;
-}
-
-@keyframes ambient-orb-move {
-  0% {
-    transform: translate3d(-5%, 5%, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(8%, -4%, 0) scale(1.05);
-  }
-  100% {
-    transform: translate3d(-6%, -2%, 0) scale(1.1);
-  }
-}
-
-/* Film grain overlay */
-.film-grain {
-  position: absolute;
-  inset: -40px;
+/* Menyembunyikan preloader jika sudah pernah dimuat */
+.hide-preloader .preloader {
+  display: none !important;
+  opacity: 0 !important;
   pointer-events: none;
-  opacity: 0.15;
-  mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2748%27%20height%3D%2748%27%20viewBox%3D%270%200%2048%2048%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.9%27%20numOctaves%3D%275%20%27stitchTiles%3D%27noStitch%27/%3E%3C/filter%3E%3Crect%20width%3D%2748%27%20height%3D%2748%27%20filter%3D%27url(%23n)%27/%3E%3C/svg%3E");
-  background-size: cover;
-  will-change: transform, opacity;
-  transform: translateZ(0);
-}
-
-.hero-video {
-  will-change: transform;
-  transform: translateZ(0);
 }

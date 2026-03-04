@@ -1,40 +1,36 @@
 ---
+
 ---
 
-<header class="fixed top-0 left-0 right-0 z-40">
+<header
+  class="glass-nav fixed top-0 left-0 right-0 z-50 w-full border-b border-white/5"
+>
   <div
-    class="glass-nav mx-auto flex max-w-6xl items-center justify-between px-4 py-4 text-[0.8rem] md:px-6"
+    class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-[0.8rem] md:px-10"
   >
     <a
       href="/"
-      class="font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
-      data-cursor="hover"
+      class="font-semibold uppercase tracking-[0.28em] text-[var(--color-light)] transition-colors hover:text-[var(--color-accent)]"
     >
       PULANGJAMSEBELAS
     </a>
 
-    <nav class="hidden items-center gap-6 md:flex">
+    <nav class="hidden items-center gap-8 md:flex">
       <a
         href="/"
         class="text-neutral-400 transition-colors hover:text-[var(--color-light)]"
-        data-cursor="hover"
+        >Home</a
       >
-        Home
-      </a>
       <a
         href="/works"
         class="text-neutral-400 transition-colors hover:text-[var(--color-light)]"
-        data-cursor="hover"
+        >Works</a
       >
-        Works
-      </a>
       <a
         href="/about"
         class="text-neutral-400 transition-colors hover:text-[var(--color-light)]"
-        data-cursor="hover"
+        >About</a
       >
-        About
-      </a>
     </nav>
 
     <button
@@ -42,7 +38,6 @@
       aria-label="Toggle navigation"
       aria-expanded="false"
       type="button"
-      data-cursor="hover"
     >
       <span
         class="pointer-events-none block h-[1px] w-4 origin-center bg-white transition-transform duration-200"
@@ -54,74 +49,74 @@
   </div>
 
   <div
-    class="js-nav-overlay pointer-events-none fixed inset-0 z-30 flex items-center justify-center bg-black/90 opacity-0 transition-opacity duration-300 md:hidden"
+    class="js-nav-overlay pointer-events-none fixed inset-0 z-40 flex h-screen w-screen items-center justify-center bg-black/95 opacity-0 transition-opacity duration-300 md:hidden"
   >
     <nav class="flex flex-col items-center gap-8">
       <a
         href="/"
         class="text-2xl font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
-        data-cursor="hover"
+        >Home</a
       >
-        Home
-      </a>
       <a
         href="/works"
         class="text-2xl font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
-        data-cursor="hover"
+        >Works</a
       >
-        Works
-      </a>
       <a
         href="/about"
         class="text-2xl font-semibold uppercase tracking-[0.28em] text-[var(--color-light)]"
-        data-cursor="hover"
+        >About</a
       >
-        About
-      </a>
     </nav>
   </div>
+</header>
 
 <script>
   if (typeof window !== "undefined") {
-    const toggle = document.querySelector(".js-nav-toggle");
-    const overlay = document.querySelector(".js-nav-overlay");
-    const body = document.body;
+    document.addEventListener("astro:page-load", () => {
+      const toggle = document.querySelector(".js-nav-toggle");
+      const overlay = document.querySelector(".js-nav-overlay");
+      const body = document.body;
 
-    if (toggle && overlay) {
-      const [line1, line2] = toggle.querySelectorAll("span");
+      if (toggle && overlay) {
+        const [line1, line2] = toggle.querySelectorAll("span");
+        let isOpen = false;
 
-      const setOpen = (open) => {
-        toggle.setAttribute("aria-expanded", open ? "true" : "false");
-        overlay.style.pointerEvents = open ? "auto" : "none";
-        overlay.style.opacity = open ? "1" : "0";
+        const setOpen = (open: boolean) => {
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
 
-        if (line1 && line2) {
-          if (open) {
-            line1.style.transform = "translateY(3px) rotate(45deg)";
-            line2.style.transform = "translateY(-3px) rotate(-45deg)";
-          } else {
-            line1.style.transform = "";
-            line2.style.transform = "";
+          if (overlay instanceof HTMLElement) {
+            overlay.style.pointerEvents = open ? "auto" : "none";
+            overlay.style.opacity = open ? "1" : "0";
           }
-        }
 
-        body.style.overflow = open ? "hidden" : "";
-      };
+          if (line1 && line2) {
+            if (open) {
+              (line1 as HTMLElement).style.transform =
+                "translateY(3px) rotate(45deg)";
+              (line2 as HTMLElement).style.transform =
+                "translateY(-3px) rotate(-45deg)";
+            } else {
+              (line1 as HTMLElement).style.transform = "";
+              (line2 as HTMLElement).style.transform = "";
+            }
+          }
 
-      let isOpen = false;
+          body.style.overflow = open ? "hidden" : "";
+        };
 
-      toggle.addEventListener("click", () => {
-        isOpen = !isOpen;
-        setOpen(isOpen);
-      });
+        toggle.addEventListener("click", () => {
+          isOpen = !isOpen;
+          setOpen(isOpen);
+        });
 
-      overlay.addEventListener("click", (event) => {
-        if (event.target === overlay) {
-          isOpen = false;
-          setOpen(false);
-        }
-      });
-    }
+        overlay.addEventListener("click", (event) => {
+          if (event.target === overlay) {
+            isOpen = false;
+            setOpen(false);
+          }
+        });
+      }
+    });
   }
 </script>
-
